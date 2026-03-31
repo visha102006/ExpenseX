@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseX - Premium Income & Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Premium Animated Background -->
+    <div class="background-mesh">
+        <div class="mesh-1"></div>
+        <div class="mesh-2"></div>
+        <div class="mesh-3"></div>
+    </div>
+
+    <div class="app-container fade-in">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h1>ExpenseX</h1>
+            </div>
+            <div class="header-actions">
+                <button type="button" id="export-csv-btn" class="btn-icon" title="Export to CSV">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                </button>
+                <button type="button" id="dark-mode-toggle" class="btn-icon" title="Toggle Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main>
+            <!-- Summary Cards -->
+            <section class="summary-cards">
+                <div class="card glass-card balance-card">
+                    <div class="card-glow"></div>
+                    <div class="balance-content">
+                        <h3>Total Balance</h3>
+                        <h2 id="total-balance">₹0.00</h2>
+                        <div class="balance-line"></div>
+                    </div>
+                </div>
+                <div class="card glass-card mini-card income-card">
+                    <div class="card-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <div class="card-info">
+                        <h3>Income</h3>
+                        <h2 id="total-income">₹0.00</h2>
+                    </div>
+                </div>
+                <div class="card glass-card mini-card expense-card">
+                    <div class="card-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                    <div class="card-info">
+                        <h3>Expenses</h3>
+                        <h2 id="total-expense">₹0.00</h2>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Left Column -->
+                <div class="left-col">
+                    <!-- Chart Section -->
+                    <section class="card glass-card chart-section">
+                        <div class="section-header">
+                            <h3>Analytics</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="expense-chart"></canvas>
+                        </div>
+                        <div id="summary-insights" class="insights">
+                            <!-- Insights dynamically populated -->
+                        </div>
+                    </section>
+
+                    <!-- Add Transaction Section -->
+                    <section class="card glass-card add-transaction-section">
+                        <div class="section-header">
+                            <h3>New Transaction</h3>
+                        </div>
+                        <form id="transaction-form" class="modern-form">
+                            <div class="type-toggle-wrapper">
+                                <div class="type-toggle">
+                                    <label>
+                                        <input type="radio" name="type" value="expense" checked>
+                                        <span class="btn-toggle expense-toggle">Expense</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="type" value="income">
+                                        <span class="btn-toggle income-toggle">Income</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group floating">
+                                    <input type="text" id="desc" class="form-control" placeholder=" " required>
+                                    <label for="desc">What was it for?</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row split-row">
+                                <div class="form-group floating amount-group">
+                                    <span class="currency-symbol">₹</span>
+                                    <input type="number" id="amount" class="form-control has-icon" placeholder=" " min="0.01" step="0.01" required>
+                                    <label for="amount">Amount</label>
+                                </div>
+                                <div class="form-group floating">
+                                    <input type="date" id="date" class="form-control" required>
+                                    <label for="date" class="active">Date</label>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group floating">
+                                    <select id="category" class="form-control" required>
+                                        <!-- Categories dynamically added -->
+                                    </select>
+                                    <label for="category" class="active">Category</label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary-gradient">
+                                <span>Add Transaction</span>
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </form>
+                    </section>
+                </div>
+
+                <!-- Right Column -->
+                <div class="right-col">
+                    <!-- Transactions List Section -->
+                    <section class="card glass-card transactions-section">
+                        <div class="section-header">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        
+                        <!-- Filters -->
+                        <div class="filters-container">
+                            <div class="search-box glass-input">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="search-input" placeholder="Search activity...">
+                            </div>
+                            <div class="filter-actions">
+                                <select id="filter-category" class="glass-select">
+                                    <option value="all">All Categories</option>
+                                    <optgroup label="Income">
+                                        <option value="Salary">Salary</option>
+                                        <option value="Investment">Investment</option>
+                                        <option value="Gift">Gift</option>
+                                        <option value="Other Income">Other Income</option>
+                                    </optgroup>
+                                    <optgroup label="Expense">
+                                        <option value="Food">Food</option>
+                                        <option value="Travel">Travel</option>
+                                        <option value="Bills">Bills</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Shopping">Shopping</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Other Expense">Other Expense</option>
+                                    </optgroup>
+                                </select>
+                                <input type="date" id="filter-date-start" class="glass-date" title="Start Date">
+                                <input type="date" id="filter-date-end" class="glass-date" title="End Date">
+                                <button type="button" id="clear-filters" class="btn-glass-icon" title="Clear Filters">
+                                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Transaction List -->
+                        <div class="transaction-list" id="transaction-list">
+                            <!-- Transactions dynamically injected -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
